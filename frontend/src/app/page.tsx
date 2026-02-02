@@ -9,10 +9,19 @@ import { HowItWorksSection } from '../components/sections/process/HowItWorksSect
 import { FileUpload } from '../components/features/FileUpload';
 import { ResultsDisplay } from '../components/features/ResultsDisplay';
 
+interface ResultType {
+  downloadUrl: string;
+  info: {
+    title: string;
+    version: string;
+  };
+  toolCount: number;
+}
+
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ResultType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
@@ -37,8 +46,12 @@ export default function Home() {
       }
 
       setResult(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setLoading(false);
     }

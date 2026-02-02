@@ -49,11 +49,11 @@ export function HowItWorksSection() {
                             <div className="p-6 md:p-8 overflow-x-auto">
                                 <pre className="font-mono text-xs md:text-sm leading-relaxed text-gray-300">
                                     <code>
-                                        <span className="text-purple-400">import</span> {'{ McpServer }'} <span className="text-purple-400">from</span> <span className="text-green-400">"@modelcontextprotocol/sdk"</span>;{'\n\n'}
+                                        <span className="text-purple-400">import</span> {'{ McpServer }'} <span className="text-purple-400">from</span> <span className="text-green-400">&quot;@modelcontextprotocol/sdk&quot;</span>;{'\n\n'}
 
-                                        <span className="text-gray-500 italic">// Generated Tool Definition</span>{'\n'}
+                                        <span className="text-gray-500 italic">{'// Generated Tool Definition'}</span>{'\n'}
                                         <span className="text-blue-400">server</span>.tool({'\n'}
-                                        {'  '}<span className="text-green-400">"get_user_data"</span>,{'\n'}
+                                        {'  '}<span className="text-green-400">&quot;get_user_data&quot;</span>,{'\n'}
                                         {'  '}<span className="text-yellow-300">{'{ userId: z.string() }'}</span>,{'\n'}
                                         {'  '}<span className="text-purple-400">async</span> ({'{ userId }'}) ={'>'} {'{'}{'\n'}
                                         {'    '}<span className="text-purple-400">const</span> data = <span className="text-purple-400">await</span> db.find(userId);{'\n'}

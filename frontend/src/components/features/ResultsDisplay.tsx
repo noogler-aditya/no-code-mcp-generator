@@ -1,10 +1,18 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { CheckCircle, Download, ExternalLink, Box, Terminal, Share2 } from 'lucide-react';
 
+interface ResultType {
+    downloadUrl: string;
+    info: {
+        title: string;
+        version: string;
+    };
+    toolCount: number;
+}
+
 interface ResultsDisplayProps {
-    result: any;
+    result: ResultType;
     onReset: () => void;
 }
 

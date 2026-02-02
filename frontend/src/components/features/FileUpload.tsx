@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, FileJson, X, Check, FileType } from 'lucide-react';
+import { Upload, FileJson, X } from 'lucide-react';
 
 interface FileUploadProps {
     onFileSelect: (file: File) => void;
