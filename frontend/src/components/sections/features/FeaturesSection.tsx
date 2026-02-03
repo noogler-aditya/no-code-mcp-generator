@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Zap, Shield, Code2, Cpu } from "lucide-react";
+import { Zap, Shield, Cpu } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 
 const features = [

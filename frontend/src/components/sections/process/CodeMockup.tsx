@@ -35,11 +35,11 @@ export function CodeMockup() {
                             <span className="text-[#c792ea]">import</span> <span className="text-[#ffd700]">{`{ McpServer }`}</span> <span className="text-[#c792ea]">from</span> <span className="text-[#89ddff]">{`"@modelcontextprotocol/sdk"`}</span>;<br /><br />
                             <span className="text-[#546e7a] italic">{`// Generated from OpenAPI spec`}</span><br />
                             <span className="text-[#c792ea]">const</span> <span className="text-[#82aaff]">server</span> = <span className="text-[#c792ea]">new</span> <span className="text-[#ffcb6b]">McpServer</span>({`{`}<br />
-                            &nbsp;&nbsp;<span className="text-[#f07178]">name</span>: <span className="text-[#c3e88d]">"weather-agent"</span>,<br />
-                            &nbsp;&nbsp;<span className="text-[#f07178]">version</span>: <span className="text-[#c3e88d]">"1.0.0"</span><br />
+                            &nbsp;&nbsp;<span className="text-[#f07178]">name</span>: <span className="text-[#c3e88d]">{`"weather-agent"`}</span>,<br />
+                            &nbsp;&nbsp;<span className="text-[#f07178]">version</span>: <span className="text-[#c3e88d]">{`"1.0.0"`}</span><br />
                             {`}`});<br /><br />
                             <span className="text-[#82aaff]">server</span>.<span className="text-[#82aaff]">tool</span>(<br />
-                            &nbsp;&nbsp;<span className="text-[#c3e88d]">"get_forecast"</span>,<br />
+                            &nbsp;&nbsp;<span className="text-[#c3e88d]">{`"get_forecast"`}</span>,<br />
                             &nbsp;&nbsp;<span className="text-[#c792ea]">async</span> ({`{ city }`}) {`=>`} {`{`}<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#c792ea]">const</span> <span className="text-[#82aaff]">data</span> = <span className="text-[#c792ea]">await</span> <span className="text-[#82aaff]">api</span>.<span className="text-[#82aaff]">fetch</span>(city);<br />
                             &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#c792ea]">return</span> <span className="text-[#82aaff]">format</span>(data);<br />

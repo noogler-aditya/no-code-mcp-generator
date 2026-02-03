@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import {
   CheckCircle,
   Download,
-  ExternalLink,
   Box,
   Terminal,
   Share2,
