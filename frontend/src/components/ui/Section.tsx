@@ -2,24 +2,38 @@ import React from "react";
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
     id?: string;
-    grid?: boolean;
+    spacing?: "sm" | "md" | "lg" | "xl";
+    withGradient?: boolean;
 }
+
+const spacingClasses = {
+    sm: "py-12 md:py-16",
+    md: "py-16 md:py-24",
+    lg: "py-20 md:py-32",
+    xl: "py-24 md:py-40",
+};
 
 export function Section({
     id,
-    className,
+    className = "",
     children,
-    grid = false,
+    spacing = "lg",
+    withGradient = false,
     ...props
 }: SectionProps) {
     return (
         <section
             id={id}
-            className={`relative py-24 overflow-hidden ${className || ""}`}
+            className={`relative overflow-hidden ${spacingClasses[spacing]} ${className}`}
             {...props}
         >
-            {grid && (
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+            {withGradient && (
+                <div
+                    className="absolute inset-0 pointer-events-none"
+                    aria-hidden="true"
+                >
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-[var(--primary-600)]/8 via-transparent to-transparent blur-3xl" />
+                </div>
             )}
             {children}
         </section>

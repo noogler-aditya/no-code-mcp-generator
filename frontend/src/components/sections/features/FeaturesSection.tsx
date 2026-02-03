@@ -2,45 +2,63 @@
 
 import { motion } from "framer-motion";
 import { Zap, Shield, Code2, Cpu } from "lucide-react";
+import { Container } from "@/components/ui/Container";
+
+const features = [
+  {
+    icon: Zap,
+    color: "var(--brand-cyan)",
+    title: "Instant Generation",
+    desc: "Upload your spec and get a fully typed, runnable server in milliseconds. We handle complex schema mapping automatically."
+  },
+  {
+    icon: Shield,
+    color: "var(--brand-blue)",
+    title: "Type-Safe & Secure",
+    desc: "Built-in Zod validation means your agents can't hallucinate invalid parameters. 100% TypeScript safety."
+  },
+  {
+    icon: Cpu,
+    color: "var(--brand-pink)",
+    title: "MCP Standard",
+    desc: "Fully compliant with the Model Context Protocol. Works instantly with Claude Desktop, Cursor, and custom agents."
+  }
+];
 
 const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
+    transition: { staggerChildren: 0.1 }
+  }
 };
 
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 px-6 md:px-8 bg-black/5">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 md:mb-24">
+    <section id="features" className="py-24">
+      <Container>
+        <div className="text-center mb-20 max-w-3xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-3xl md:text-5xl font-bold font-outfit mb-6 tracking-tight text-white text-balance"
+            className="heading-1 mb-6 text-slate-900"
           >
-            Built for Modern Engineering
+            Built for the <span className="text-slate-900 underline decoration-4 decoration-blue-500/30 underline-offset-4">Agentic Future</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-zinc-400 max-w-2xl mx-auto text-lg leading-relaxed text-balance"
+            transition={{ delay: 0.1 }}
+            className="text-lg text-slate-700 font-medium"
           >
-            Stop writing boilerplate tool definitions. Let us handle the heavy
-            lifting while you focus on building great agents.
+            We handle the heavy lifting while you focus on building great agents.
           </motion.p>
         </div>
 
@@ -48,99 +66,32 @@ export function FeaturesSection() {
           variants={container}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(280px,auto)]"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {/* Large Card - Spans 2 cols */}
-          <motion.div
-            variants={item}
-            className="md:col-span-2 p-8 md:p-10 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.04] transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
-          >
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 group-hover:bg-blue-500/15 transition-all" />
-
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center mb-6 text-blue-400 shadow-lg shadow-blue-500/10">
-                <Zap className="w-6 h-6" />
+          {features.map((feature, idx) => (
+            <motion.div
+              key={idx}
+              variants={item}
+              className="bg-white/60 backdrop-blur-xl border border-white/40 p-8 hover:bg-white/80 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1"
+            >
+              <div
+                className="mb-6 w-12 h-12 flex items-center justify-center bg-white border border-white/50 shadow-sm rounded-sm"
+              >
+                <feature.icon className="w-6 h-6" style={{ color: feature.color }} />
               </div>
-              <h3 className="text-2xl font-bold font-outfit mb-3 text-white">
-                Instant Generation
+
+              <h3 className="heading-3 mb-4 text-slate-900">
+                {feature.title}
               </h3>
-              <p className="text-zinc-400 leading-relaxed max-w-lg text-sm md:text-base">
-                Upload your spec and get a fully typed, runnable server in
-                milliseconds. We handle complex nested schemas, authentication
-                types, and parameter mapping automatically.
+
+              <p className="text-slate-600 leading-relaxed font-medium">
+                {feature.desc}
               </p>
-            </div>
-          </motion.div>
-
-          {/* Tall Card - Spans 1 col, 2 rows */}
-          <motion.div
-            variants={item}
-            className="md:row-span-2 p-8 md:p-10 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.04] transition-all duration-300 group relative overflow-hidden flex flex-col"
-          >
-            <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/3 group-hover:bg-purple-500/15 transition-all" />
-
-            <div className="relative z-10 h-full flex flex-col">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6 text-purple-400 shadow-lg shadow-purple-500/10">
-                <Cpu className="w-6 h-6" />
-              </div>
-              <h3 className="text-2xl font-bold font-outfit mb-3 text-white">
-                MCP Standard
-              </h3>
-              <p className="text-zinc-400 leading-relaxed mb-6 text-sm md:text-base flex-grow">
-                Fully compliant with the Model Context Protocol. Your generated
-                servers are instantly compatible with:
-              </p>
-              <ul className="space-y-4 text-zinc-500 text-sm font-medium">
-                <li className="flex items-center gap-3">
-                  <span className="flex h-2 w-2 rounded-full bg-purple-400 ring-4 ring-purple-400/10"></span>
-                  Claude Desktop
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="flex h-2 w-2 rounded-full bg-purple-400 ring-4 ring-purple-400/10"></span>
-                  Cursor IDE
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="flex h-2 w-2 rounded-full bg-purple-400 ring-4 ring-purple-400/10"></span>
-                  Custom Agents
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Small Card 1 */}
-          <motion.div
-            variants={item}
-            className="p-8 md:p-10 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.04] transition-all duration-300 relative overflow-hidden flex flex-col justify-center"
-          >
-            <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-4 text-green-400 shadow-lg shadow-green-500/10">
-              <Shield className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold font-outfit mb-2 text-white">
-              Secure by Default
-            </h3>
-            <p className="text-zinc-400 text-sm leading-relaxed">
-              Built-in validation ensures secure exposure of internal APIs.
-            </p>
-          </motion.div>
-
-          {/* Small Card 2 */}
-          <motion.div
-            variants={item}
-            className="p-8 md:p-10 rounded-3xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.04] transition-all duration-300 relative overflow-hidden flex flex-col justify-center"
-          >
-            <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4 text-orange-400 shadow-lg shadow-orange-500/10">
-              <Code2 className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold font-outfit mb-2 text-white">
-              Type-Safe
-            </h3>
-            <p className="text-zinc-400 text-sm leading-relaxed">
-              100% TypeScript with Zod schemas for runtime safety.
-            </p>
-          </motion.div>
+            </motion.div>
+          ))}
         </motion.div>
-      </div>
+      </Container>
     </section>
   );
 }

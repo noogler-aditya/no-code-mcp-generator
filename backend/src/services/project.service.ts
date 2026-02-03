@@ -14,6 +14,14 @@ if (!fs.existsSync(GENERATED_DIR)) {
 
 export class ProjectService {
     static async generateProject(spec: OpenApiSpec, tools: McpToolDefinition[]): Promise<{ downloadUrl: string, projectId: string }> {
+        // Trigger generic cleanup
+        this.cleanOldProjects();
+
+        // Validation: Verify template exists
+        if (!fs.existsSync(TEMPLATE_DIR)) {
+            throw new Error(`Template directory not found at ${TEMPLATE_DIR}. Please report this issue.`);
+        }
+
         const projectId = uuidv4();
         const projectDir = path.join(GENERATED_DIR, projectId);
 
@@ -35,6 +43,25 @@ export class ProjectService {
             projectId,
             downloadUrl: `/api/generator/download/${projectId}`
         };
+    }
+
+    // Cleanup files older than 1 hour
+    private static cleanOldProjects() {
+        try {
+            const files = fs.readdirSync(GENERATED_DIR);
+            const now = Date.now();
+            const ONE_HOUR = 60 * 60 * 1000;
+
+            for (const file of files) {
+                const filePath = path.join(GENERATED_DIR, file);
+                const stats = fs.statSync(filePath);
+                if (now - stats.mtimeMs > ONE_HOUR) {
+                    fs.rmSync(filePath, { recursive: true, force: true });
+                }
+            }
+        } catch (e) {
+            console.error("Cleanup failed", e);
+        }
     }
 
     private static async copyRecursive(src: string, dest: string) {

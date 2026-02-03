@@ -27,6 +27,7 @@ export class ToolGeneratorService {
         // Build input schema
         const properties: any = {};
         const required: string[] = [];
+        const parameterMetadata: Record<string, { location: 'path' | 'query' | 'header' | 'cookie' | 'body' }> = {};
 
         // Handle parameters (path, query, etc.)
         if (operation.parameters) {
@@ -39,6 +40,8 @@ export class ToolGeneratorService {
                     if (param.required) {
                         required.push(param.name);
                     }
+                    // Capture metadata
+                    parameterMetadata[param.name] = { location: param.in };
                 }
             }
         }
@@ -54,7 +57,9 @@ export class ToolGeneratorService {
                         description: propSchema.description || `Body property ${propName}`
                     };
 
-                    // TODO: Handle required body params deeply if needed, checking jsonContent.schema.required
+                    parameterMetadata[propName] = { location: 'body' };
+
+                    // TODO: Handle required body params deeply if needed
                     if (jsonContent.schema.required && jsonContent.schema.required.includes(propName)) {
                         required.push(propName);
                     }
@@ -70,7 +75,8 @@ export class ToolGeneratorService {
             inputSchema: {
                 type: 'object',
                 properties,
-            }
+            },
+            parameterMetadata
         };
 
         if (required.length > 0) {

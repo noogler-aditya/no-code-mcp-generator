@@ -73,4 +73,9 @@ export interface McpToolDefinition {
         };
         required?: string[];
     };
+    parameterMetadata?: {
+        [key: string]: {
+            location: 'path' | 'query' | 'header' | 'cookie' | 'body';
+        };
+    };
 }

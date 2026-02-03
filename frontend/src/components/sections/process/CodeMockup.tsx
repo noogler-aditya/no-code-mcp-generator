@@ -1,84 +1,65 @@
+"use client";
+
 import { motion } from "framer-motion";
 
 export function CodeMockup() {
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative mt-12 lg:mt-0 group"
+            transition={{ duration: 0.6 }}
+            className="relative"
         >
-            {/* Code Preview Mockup */}
-            <div className="rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-card)] shadow-2xl shadow-black/80 overflow-hidden ring-1 ring-white/5 transition-shadow duration-500 group-hover:shadow-blue-900/20">
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--surface-border)] bg-[var(--surface-1)]">
-                    <div className="flex gap-2" aria-hidden="true">
-                        <div className="w-3 h-3 rounded-full bg-[#FF5F56] shadow-sm" />
-                        <div className="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-sm" />
-                        <div className="w-3 h-3 rounded-full bg-[#27C93F] shadow-sm" />
+            {/* 
+        Background Glow using the specific gradient colors 
+        Cyan -> Blue -> Pink
+      */}
+            <div className="absolute -inset-1 bg-gradient-to-br from-[var(--brand-cyan)]/20 via-[var(--brand-blue)]/20 to-[var(--brand-pink)]/20 blur-2xl opacity-40" />
+
+            <div className="relative rounded-lg border border-[var(--border-default)] bg-[#0d0d0f] shadow-2xl overflow-hidden">
+                {/* Header */}
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border-default)] bg-[#1a1a1c]">
+                    <div className="flex gap-1.5">
+                        <span className="w-3 h-3 rounded-full bg-[#ff5f56]" />
+                        <span className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
+                        <span className="w-3 h-3 rounded-full bg-[#27c93f]" />
                     </div>
-                    <div className="ml-4 text-xs text-zinc-500 font-mono tracking-wide">
-                        src/server.ts
-                    </div>
+                    <span className="ml-2 text-xs font-mono text-[var(--text-muted)]">src/server.ts</span>
                 </div>
-                <div className="p-6 md:p-8 overflow-x-auto bg-black/40">
-                    <pre className="font-mono text-xs md:text-sm leading-relaxed text-gray-300">
+
+                {/* Code */}
+                <div className="p-6 overflow-x-auto font-mono text-sm">
+                    <pre className="text-[var(--text-secondary)]">
                         <code>
-                            <span className="text-purple-400">import</span>{" "}
-                            {"{ McpServer }"}{" "}
-                            <span className="text-purple-400">from</span>{" "}
-                            <span className="text-green-400">
-                                &quot;@modelcontextprotocol/sdk&quot;
-                            </span>
-                            ;{"\n\n"}
-                            <span className="text-zinc-500 italic">
-                                {"// Generated Tool Definition"}
-                            </span>
-                            {"\n"}
-                            <span className="text-blue-400">server</span>.tool({"\n"}
-                            {"  "}
-                            <span className="text-green-400">
-                                &quot;get_user_data&quot;
-                            </span>
-                            ,{"\n"}
-                            {"  "}
-                            <span className="text-yellow-300">
-                                {"{ userId: z.string() }"}
-                            </span>
-                            ,{"\n"}
-                            {"  "}
-                            <span className="text-purple-400">async</span> (
-                            {"{ userId }"}) ={">"} {"{"}
-                            {"\n"}
-                            {"    "}
-                            <span className="text-purple-400">const</span> data ={" "}
-                            <span className="text-purple-400">await</span>{" "}
-                            db.find(userId);{"\n"}
-                            {"    "}
-                            <span className="text-purple-400">return</span>{" "}
-                            {
-                                '{ content: [{ type: "text", text: JSON.stringify(data) }] }'
-                            }
-                            ;{"\n"}
-                            {"  "}
-                            {"}"}
-                            {"\n"}
+                            <span className="text-[#c792ea]">import</span> <span className="text-[#ffd700]">{`{ McpServer }`}</span> <span className="text-[#c792ea]">from</span> <span className="text-[#89ddff]">{`"@modelcontextprotocol/sdk"`}</span>;<br /><br />
+                            <span className="text-[#546e7a] italic">{`// Generated from OpenAPI spec`}</span><br />
+                            <span className="text-[#c792ea]">const</span> <span className="text-[#82aaff]">server</span> = <span className="text-[#c792ea]">new</span> <span className="text-[#ffcb6b]">McpServer</span>({`{`}<br />
+                            &nbsp;&nbsp;<span className="text-[#f07178]">name</span>: <span className="text-[#c3e88d]">"weather-agent"</span>,<br />
+                            &nbsp;&nbsp;<span className="text-[#f07178]">version</span>: <span className="text-[#c3e88d]">"1.0.0"</span><br />
+                            {`}`});<br /><br />
+                            <span className="text-[#82aaff]">server</span>.<span className="text-[#82aaff]">tool</span>(<br />
+                            &nbsp;&nbsp;<span className="text-[#c3e88d]">"get_forecast"</span>,<br />
+                            &nbsp;&nbsp;<span className="text-[#c792ea]">async</span> ({`{ city }`}) {`=>`} {`{`}<br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#c792ea]">const</span> <span className="text-[#82aaff]">data</span> = <span className="text-[#c792ea]">await</span> <span className="text-[#82aaff]">api</span>.<span className="text-[#82aaff]">fetch</span>(city);<br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-[#c792ea]">return</span> <span className="text-[#82aaff]">format</span>(data);<br />
+                            &nbsp;&nbsp;{`}`}<br />
                             );
                         </code>
                     </pre>
                 </div>
             </div>
 
-            {/* Floating Badge */}
+            {/* Floating Status Badge */}
             <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-8 -right-8 bg-[var(--surface-elevated)] border border-blue-500/20 p-6 rounded-2xl shadow-xl shadow-blue-900/10 hidden md:block backdrop-blur-sm"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+                className="absolute -bottom-5 -right-5 bg-[var(--surface-1)] border border-[var(--border-default)] px-4 py-2 flex items-center gap-2 shadow-xl"
             >
-                <div className="text-blue-400 font-bold text-3xl mb-1">100%</div>
-                <div className="text-blue-200/50 text-xs font-medium uppercase tracking-wider">
-                    Type Coverage
-                </div>
+                <span className="w-2 h-2 rounded-full bg-[var(--brand-cyan)] animate-pulse" />
+                <span className="text-sm font-medium text-white">Full Type Safety</span>
             </motion.div>
         </motion.div>
     );

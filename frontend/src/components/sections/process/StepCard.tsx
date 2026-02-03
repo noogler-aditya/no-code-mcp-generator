@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 
 interface StepCardProps {
@@ -5,28 +7,34 @@ interface StepCardProps {
     title: string;
     desc: string;
     delay: number;
+    isLast?: boolean;
 }
 
-export function StepCard({ number, title, desc, delay }: StepCardProps) {
+export function StepCard({ number, title, desc, delay, isLast = false }: StepCardProps) {
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay }}
-            className="flex gap-6 group hover:translate-x-2 transition-transform duration-300 ease-out p-4 -ml-4 rounded-xl hover:bg-white/[0.02]"
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay, ease: "easeOut" }}
+            className="relative pl-12 pb-12 last:pb-0 group"
         >
-            <div
-                className="font-outfit font-bold text-3xl text-white/10 group-hover:text-blue-500/40 transition-colors duration-300"
-                aria-hidden="true"
-            >
+            {/* Connecting Line - Darker for visibility */}
+            {!isLast && (
+                <div className="absolute left-[19px] top-[40px] bottom-0 w-px bg-slate-900/10 group-hover:bg-slate-900/30 transition-colors" />
+            )}
+
+            {/* Number Badge */}
+            <div className="absolute left-0 top-1 w-10 h-10 flex items-center justify-center bg-white border border-slate-200 shadow-sm text-slate-700 font-mono text-sm font-bold z-10 transition-all duration-300 group-hover:border-black group-hover:text-black group-hover:scale-110">
                 {number}
             </div>
-            <div className="pt-1">
-                <h3 className="text-lg font-semibold font-outfit text-white mb-2 group-hover:text-blue-400 transition-colors">
+
+            {/* Content */}
+            <div className="pt-2">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
                     {title}
                 </h3>
-                <p className="text-zinc-500 text-sm leading-relaxed max-w-xs group-hover:text-zinc-400 transition-colors">
+                <p className="text-slate-700 leading-relaxed font-medium">
                     {desc}
                 </p>
             </div>

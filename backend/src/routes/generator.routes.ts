@@ -8,14 +8,38 @@ import { ToolGeneratorService } from '../services/tool-generator.service.js';
 import { ProjectService } from '../services/project.service.js';
 
 const router = Router();
-const upload = multer({ dest: 'uploads/' });
+
+// Security: Constrain uploads to prevent DoS and disk fill
+const upload = multer({
+    dest: 'uploads/',
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limit: 5MB
+    },
+    fileFilter: (req, file, cb) => {
+        // Simple extension check. For deeper security, check magic bytes, but JSON/YAML is text.
+        if (!file.originalname.match(/\.(json|yaml|yml)$/i)) {
+            return cb(new Error('Only .json, .yaml, or .yml files are allowed!'));
+        }
+        cb(null, true);
+    }
+});
 
 // Create uploads dir if it doesn't exist
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
 }
 
-router.post('/upload', upload.single('spec'), async (req, res) => {
+router.post('/upload', (req, res, next) => {
+    // Wrap in closure to handle multer errors
+    upload.single('spec')(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).json({ error: `Upload error: ${err.message}` });
+        } else if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        next();
+    });
+}, async (req, res) => {
     if (!req.file) {
         res.status(400).json({ error: 'No file uploaded' });
         return; // Explicitly return
@@ -55,6 +79,13 @@ router.post('/upload', upload.single('spec'), async (req, res) => {
 
 router.get('/download/:id', (req, res) => {
     const projectId = req.params.id;
+
+    // Security: Prevent path traversal by validating UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(projectId)) {
+        return res.status(400).json({ error: 'Invalid Project ID' });
+    }
+
     const zipPath = path.resolve('public/generated', `${projectId}.zip`);
 
     if (fs.existsSync(zipPath)) {

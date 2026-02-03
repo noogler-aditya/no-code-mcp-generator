@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, FileJson, X } from "lucide-react";
+import { Upload, FileJson, X, Sparkles, CloudUpload } from "lucide-react";
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -49,22 +49,23 @@ export function FileUpload({
       <AnimatePresence mode="wait">
         {!selectedFile ? (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            key="dropzone"
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
             onClick={() => fileInputRef.current?.click()}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={`
-                    relative group cursor-pointer border-2 border-dashed rounded-2xl p-12
-                    flex flex-col items-center justify-center text-center transition-all duration-300
-                    ${
-                      isDragging
-                        ? "border-blue-500 bg-blue-500/10"
-                        : "border-white/10 hover:border-white/20 hover:bg-white/5"
-                    }
-                `}
+              relative group cursor-pointer border border-dashed rounded-none transition-all duration-300
+              flex flex-col items-center justify-center py-16 px-8 bg-[var(--surface-0)]
+              ${isDragging
+                ? "border-[var(--brand-cyan)] bg-[var(--brand-cyan)]/5"
+                : "border-[var(--border-default)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-1)]"
+              }
+            `}
           >
             <input
               type="file"
@@ -76,36 +77,43 @@ export function FileUpload({
               }}
             />
 
-            <div
-              className={`
-                    p-4 rounded-full mb-6 transition-colors duration-300
-                    ${isDragging ? "bg-blue-500/20 text-blue-400" : "bg-white/5 text-gray-400 group-hover:text-white group-hover:bg-white/10"}
-                `}
-            >
-              <Upload className="w-8 h-8" />
+            {/* Icon Area */}
+            <div className={`mb-6 p-4 rounded-full border transition-all duration-300 ${isDragging ? "border-[var(--brand-cyan)] text-[var(--brand-cyan)]" : "border-[var(--border-default)] text-[var(--text-secondary)] group-hover:text-white group-hover:border-white"}`}>
+              {isDragging ? <CloudUpload className="w-8 h-8" /> : <Upload className="w-8 h-8" />}
             </div>
 
-            <h3 className="text-lg font-medium text-white mb-2">
-              {isDragging ? "Drop file here" : "Upload API Specification"}
+            <h3 className="heading-3 mb-2 text-white">
+              Upload API Specification
             </h3>
-            <p className="text-sm text-gray-500 max-w-xs mx-auto">
-              Drag and drop your OpenAPI/Swagger JSON or YAML file here, or
-              click to browse.
+            <p className="text-[var(--text-secondary)] mb-6 text-center max-w-xs">
+              Drag & drop your OpenAPI JSON or YAML file
             </p>
+
+            {/* File Types */}
+            <div className="flex gap-2">
+              {['.json', '.yaml', '.yml'].map(ext => (
+                <span key={ext} className="text-xs font-mono px-2 py-1 border border-[var(--border-default)] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors">
+                  {ext}
+                </span>
+              ))}
+            </div>
+
           </motion.div>
         ) : (
           <motion.div
+            key="file-selected"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center justify-between"
+            exit={{ opacity: 0, y: -10 }}
+            className="w-full bg-[var(--surface-1)] border border-[var(--border-default)] p-6 flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
-                <FileJson className="w-6 h-6" />
+              <div className="w-12 h-12 bg-[var(--surface-2)] flex items-center justify-center border border-[var(--border-default)]">
+                <FileJson className="w-6 h-6 text-[var(--brand-cyan)]" />
               </div>
               <div>
-                <p className="font-medium text-white">{selectedFile.name}</p>
-                <p className="text-xs text-gray-500">
+                <p className="font-semibold text-white">{selectedFile.name}</p>
+                <p className="text-xs text-[var(--text-muted)] font-mono">
                   {(selectedFile.size / 1024).toFixed(2)} KB
                 </p>
               </div>
@@ -116,7 +124,7 @@ export function FileUpload({
                 e.stopPropagation();
                 onClear();
               }}
-              className="p-2 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors"
+              className="p-2 hover:bg-[var(--surface-2)] text-[var(--text-secondary)] hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>

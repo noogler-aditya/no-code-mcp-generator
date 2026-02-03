@@ -1,19 +1,26 @@
 import React from "react";
-import { cn } from "@/utils/cn"; // Assuming a utility or I'll implement one inline if it doesn't exist yet, usually it's best to have one.
 
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     as?: React.ElementType;
+    size?: "narrow" | "default" | "wide";
 }
+
+const sizeClasses = {
+    narrow: "max-w-[768px]",
+    default: "max-w-[1280px]",
+    wide: "max-w-[1440px]",
+};
 
 export function Container({
     as: Component = "div",
-    className,
+    className = "",
+    size = "default",
     children,
     ...props
 }: ContainerProps) {
     return (
         <Component
-            className={`mx-auto w-full max-w-7xl px-6 md:px-8 ${className || ""}`}
+            className={`mx-auto w-full px-6 md:px-8 lg:px-12 ${sizeClasses[size]} ${className}`}
             {...props}
         >
             {children}

@@ -35,7 +35,7 @@ export default function Home() {
 
     try {
       const response = await fetch(
-        "http://localhost:3001/api/generator/upload",
+        "/api/generator/upload",
         {
           method: "POST",
           body: formData,
@@ -61,50 +61,47 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-foreground flex flex-col font-inter selection:bg-blue-500/30">
+    <div className="min-h-screen bg-[var(--background)] text-white flex flex-col font-sans selection:bg-[var(--primary-500)]/30">
       <Header />
 
-      <main>
+      <main className="flex-1">
         <HeroSection>
           {!result ? (
-            <div className="glass-panel p-2 rounded-3xl bg-black/40 border border-white/10 shadow-2xl shadow-blue-900/10 backdrop-blur-xl">
-              <div className="p-8 md:p-10 rounded-2xl bg-gradient-to-b from-white/[0.03] to-transparent">
-                <FileUpload
-                  onFileSelect={setFile}
-                  selectedFile={file}
-                  onClear={() => setFile(null)}
-                />
+            <div className="bg-[var(--surface-0)] border border-[var(--border-default)] p-4 md:p-6 lg:p-8">
+              <FileUpload
+                onFileSelect={setFile}
+                selectedFile={file}
+                onClear={() => setFile(null)}
+              />
 
-                <div className="mt-8">
-                  <button
-                    onClick={handleSubmit}
-                    disabled={!file || loading}
-                    className={`
-                            w-full flex items-center justify-center gap-3 py-4 text-lg font-semibold rounded-xl transition-all duration-300
-                            ${
-                              !file || loading
-                                ? "bg-white/5 text-gray-500 cursor-not-allowed"
-                                : "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20 hover:scale-[1.02]"
-                            }
-                          `}
-                  >
-                    {loading ? (
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Processing Spec...</span>
-                      </div>
-                    ) : (
-                      <span>Generate Agent Server</span>
-                    )}
-                  </button>
-                </div>
-
-                {error && (
-                  <div className="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
-                    {error}
-                  </div>
-                )}
+              <div className="mt-8">
+                <button
+                  onClick={handleSubmit}
+                  disabled={!file || loading}
+                  className={`
+                    w-full flex items-center justify-center gap-3 py-4 text-sm font-semibold uppercase tracking-wide transition-all duration-300
+                    ${!file || loading
+                      ? "bg-[var(--surface-2)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-subtle)]"
+                      : "btn-brand hover:shadow-[var(--shadow-glow-mixed)]"
+                    }
+                  `}
+                >
+                  {loading ? (
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                      <span>Processing...</span>
+                    </div>
+                  ) : (
+                    <span>Generate Server</span>
+                  )}
+                </button>
               </div>
+
+              {error && (
+                <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                  {error}
+                </div>
+              )}
             </div>
           ) : (
             <ResultsDisplay
