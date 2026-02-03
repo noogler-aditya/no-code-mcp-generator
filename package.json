@@ -1,0 +1,21 @@
+{
+  "name": "mcp-generator",
+  "version": "1.0.0",
+  "description": "> **Turn any OpenAPI Spec into an AI Agent Server in seconds.**   > Enterprise-grade, secure, and ready for the Model Context Protocol (MCP).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noogler-aditya/no-code-mcp-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/noogler-aditya/no-code-mcp-generator/issues"
+  },
+  "homepage": "https://github.com/noogler-aditya/no-code-mcp-generator#readme"
+}
