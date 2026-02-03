@@ -3,7 +3,7 @@
 # Lightweight Tunnel Agent (The "Bridge")
 # This script starts the local MCP server and exposes it via a secure Cloudflare Tunnel.
 
-PORT=3000
+PORT=5174
 
 # Function to check if a command exists
 command_exists() {
@@ -33,7 +33,7 @@ if [ ! -d "dist" ]; then
 fi
 
 echo "🚀 Starting Local MCP Server on port $PORT..."
-npm start &
+PORT=$PORT npm start &
 SERVER_PID=$!
 
 echo "⏳ Waiting for server to be ready..."

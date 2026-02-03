@@ -143,7 +143,7 @@ const rateLimiter = new RateLimiter();
   server.tool(
     ${nameLiteral},
     ${descriptionLiteral},
-    z.object(${shape}),
+    ${shape},
     async (args) => {
       ${axiosCall}
     }

@@ -27,7 +27,7 @@ async function main() {
 
     // Default to Express/SSE for Tunneling Support
     const app = express();
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT || 5174;
 
     app.use(cors());
     app.use(express.json());
@@ -37,6 +37,39 @@ async function main() {
         console.log("New SSE connection");
         const transport = new SSEServerTransport("/messages", res);
         await server.connect(transport);
+    });
+
+    // Friendly Home
+    app.get('/', (req, res) => {
+        res.type('html').send(`
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Generated MCP Server</title>
+            <style>
+              body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; background:#f7f4ee; color:#1f1e1c; margin:0; }
+              .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px; }
+              .card { background: #fff; border: 1px solid #e6e0d7; border-radius: 16px; padding: 24px; }
+              code { background:#f1ece4; padding:2px 6px; border-radius:6px; }
+              a { color: #1f1e1c; }
+            </style>
+          </head>
+          <body>
+            <div class="wrap">
+              <h1>Generated MCP Server</h1>
+              <p>Your server is running. Useful endpoints:</p>
+              <div class="card">
+                <p><code>/health</code> – health check</p>
+                <p><code>/sse</code> – MCP SSE endpoint</p>
+                <p><code>/messages</code> – MCP message endpoint</p>
+                <p><code>/secrets</code> – API key injection</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `);
     });
 
     // Message Endpoint
