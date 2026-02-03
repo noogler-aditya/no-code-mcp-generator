@@ -6,7 +6,8 @@ export class CodeGeneratorService {
     code += `import axios from "axios";\n`;
     code += `import { z } from "zod";\n\n`;
 
-    code += `const API_BASE_URL = "${spec.servers?.[0]?.url || 'http://localhost:8080'}";\n`;
+    const apiBaseUrl = spec.servers?.[0]?.url || 'http://localhost:8080';
+    code += `const API_BASE_URL = ${JSON.stringify(apiBaseUrl)};\n`;
 
     // Authorization Injection (The "Shovel")
     code += `const API_KEY = process.env.API_KEY; // Security Scheme detected\n\n`;
@@ -134,12 +135,14 @@ const rateLimiter = new RateLimiter();
       }
     `;
 
-    const safeDescription = ((tool.description || '').split('\n')[0] ?? '').replace(/"/g, '\\"');
+    const safeDescription = ((tool.description || '').split('\n')[0] ?? '');
+    const descriptionLiteral = JSON.stringify(safeDescription);
+    const nameLiteral = JSON.stringify(tool.name);
 
     return `
   server.tool(
-    "${tool.name}",
-    "${safeDescription}",
+    ${nameLiteral},
+    ${descriptionLiteral},
     z.object(${shape}),
     async (args) => {
       ${axiosCall}
@@ -161,8 +164,8 @@ const rateLimiter = new RateLimiter();
       if (!required.includes(key)) {
         zodType += '.optional()';
       }
-      const safeDesc = (prop.description || '').replace(/"/g, '\\"');
-      zodShape += `      ${key}: ${zodType}.describe("${safeDesc}"),\n`;
+      const safeDesc = prop.description || '';
+      zodShape += `      ${JSON.stringify(key)}: ${zodType}.describe(${JSON.stringify(safeDesc)}),\n`;
     }
     zodShape += '    }';
     return zodShape;

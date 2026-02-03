@@ -1,4 +1,5 @@
 import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import type { OpenApiSpec, McpToolDefinition } from '../types/openapi.js';
@@ -15,7 +16,7 @@ if (!fs.existsSync(GENERATED_DIR)) {
 export class ProjectService {
     static async generateProject(spec: OpenApiSpec, tools: McpToolDefinition[]): Promise<{ downloadUrl: string, projectId: string }> {
         // Trigger generic cleanup
-        this.cleanOldProjects();
+        await this.cleanOldProjects();
 
         // Validation: Verify template exists
         if (!fs.existsSync(TEMPLATE_DIR)) {
@@ -30,14 +31,14 @@ export class ProjectService {
 
         // 2. Generate tools.ts
         const toolsCode = CodeGeneratorService.generateToolsFile(tools, spec);
-        fs.writeFileSync(path.join(projectDir, 'src', 'tools.ts'), toolsCode);
+        await fsp.writeFile(path.join(projectDir, 'src', 'tools.ts'), toolsCode);
 
         // 3. Zip Project
         const zipPath = path.join(GENERATED_DIR, `${projectId}.zip`);
         await ZipService.zipDirectory(projectDir, zipPath);
 
         // 4. Cleanup Folder (keep zip)
-        fs.rmSync(projectDir, { recursive: true, force: true });
+        await fsp.rm(projectDir, { recursive: true, force: true });
 
         return {
             projectId,
@@ -46,17 +47,18 @@ export class ProjectService {
     }
 
     // Cleanup files older than 1 hour
-    private static cleanOldProjects() {
+    private static async cleanOldProjects() {
         try {
-            const files = fs.readdirSync(GENERATED_DIR);
+            const files = await fsp.readdir(GENERATED_DIR);
             const now = Date.now();
-            const ONE_HOUR = 60 * 60 * 1000;
+            const ttlHours = Number(process.env.GENERATED_TTL_HOURS || 1);
+            const ttlMs = ttlHours * 60 * 60 * 1000;
 
             for (const file of files) {
                 const filePath = path.join(GENERATED_DIR, file);
-                const stats = fs.statSync(filePath);
-                if (now - stats.mtimeMs > ONE_HOUR) {
-                    fs.rmSync(filePath, { recursive: true, force: true });
+                const stats = await fsp.stat(filePath);
+                if (now - stats.mtimeMs > ttlMs) {
+                    await fsp.rm(filePath, { recursive: true, force: true });
                 }
             }
         } catch (e) {
@@ -66,10 +68,10 @@ export class ProjectService {
 
     private static async copyRecursive(src: string, dest: string) {
         if (!fs.existsSync(dest)) {
-            fs.mkdirSync(dest, { recursive: true });
+            await fsp.mkdir(dest, { recursive: true });
         }
 
-        const entries = fs.readdirSync(src, { withFileTypes: true });
+        const entries = await fsp.readdir(src, { withFileTypes: true });
 
         for (const entry of entries) {
             const srcPath = path.join(src, entry.name);
@@ -78,7 +80,7 @@ export class ProjectService {
             if (entry.isDirectory()) {
                 await this.copyRecursive(srcPath, destPath);
             } else {
-                fs.copyFileSync(srcPath, destPath);
+                await fsp.copyFile(srcPath, destPath);
             }
         }
     }

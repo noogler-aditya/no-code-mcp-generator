@@ -1,13 +1,10 @@
 import SwaggerParser from '@apidevtools/swagger-parser';
-import fs from 'fs';
 import yaml from 'js-yaml';
 import type { OpenApiSpec } from '../types/openapi.js';
 
 export class OpenApiService {
-    static async parseAndValidate(filePath: string): Promise<OpenApiSpec> {
+    static async parseAndValidateContent(fileContent: string): Promise<OpenApiSpec> {
         try {
-            // Security: Read file content manually to avoid SwaggerParser doing LFI
-            const fileContent = fs.readFileSync(filePath, 'utf-8');
             let spec: any;
 
             try {
@@ -30,6 +27,10 @@ export class OpenApiService {
                     external: false, // Do not fetch http/https urls
                 }
             };
+
+            if (!spec || typeof spec !== 'object') {
+                throw new Error('Spec root must be an object');
+            }
 
             const api = await SwaggerParser.validate(spec, options);
             return api as unknown as OpenApiSpec;

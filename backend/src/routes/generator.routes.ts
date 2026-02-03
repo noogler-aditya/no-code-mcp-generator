@@ -2,18 +2,19 @@ import { Router } from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
 import { OpenApiService } from '../services/openapi.service.js';
 import { ToolGeneratorService } from '../services/tool-generator.service.js';
 import { ProjectService } from '../services/project.service.js';
+import { requireApiKey, maybeRequireDownloadAuth } from '../middleware/auth.js';
+import { downloadLimiter, uploadLimiter } from '../middleware/rateLimit.js';
 
 const router = Router();
 
 // Security: Constrain uploads to prevent DoS and disk fill
 const upload = multer({
-    dest: 'uploads/',
+    storage: multer.memoryStorage(),
     limits: {
-        fileSize: 5 * 1024 * 1024, // Limit: 5MB
+        fileSize: Number(process.env.UPLOAD_MAX_BYTES || 5 * 1024 * 1024), // Limit: 5MB
     },
     fileFilter: (req, file, cb) => {
         // Simple extension check. For deeper security, check magic bytes, but JSON/YAML is text.
@@ -24,12 +25,7 @@ const upload = multer({
     }
 });
 
-// Create uploads dir if it doesn't exist
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
-
-router.post('/upload', (req, res, next) => {
+router.post('/upload', uploadLimiter, requireApiKey, (req, res, next) => {
     // Wrap in closure to handle multer errors
     upload.single('spec')(req, res, (err) => {
         if (err instanceof multer.MulterError) {
@@ -45,20 +41,21 @@ router.post('/upload', (req, res, next) => {
         return; // Explicitly return
     }
 
-    const filePath = req.file.path;
-
     try {
+        if (!req.file?.buffer) {
+            return res.status(400).json({ error: 'Invalid upload payload' });
+        }
+
+        const fileContent = req.file.buffer.toString('utf-8');
+
         // 1. Validate and Parse
-        const spec = await OpenApiService.parseAndValidate(filePath);
+        const spec = await OpenApiService.parseAndValidateContent(fileContent);
 
         // 2. Generate Tools
         const tools = ToolGeneratorService.generateTools(spec);
 
         // 3. Generate Project Code & Zip
         const { projectId, downloadUrl } = await ProjectService.generateProject(spec, tools);
-
-        // Cleanup upload
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
         res.json({
             message: 'Spec parsed and project generated successfully',
@@ -70,15 +67,13 @@ router.post('/upload', (req, res, next) => {
         });
 
     } catch (error: any) {
-        // Cleanup on error
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
         console.error(error);
         res.status(500).json({ error: error.message });
     }
 });
 
-router.get('/download/:id', (req, res) => {
-    const projectId = req.params.id;
+router.get('/download/:id', downloadLimiter, maybeRequireDownloadAuth, (req, res) => {
+    const projectId = typeof req.params.id === 'string' ? req.params.id : '';
 
     // Security: Prevent path traversal by validating UUID format
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
