@@ -134,7 +134,7 @@ const rateLimiter = new RateLimiter();
       }
     `;
 
-    const safeDescription = (tool.description || '').split('\n')[0].replace(/"/g, '\\"');
+    const safeDescription = ((tool.description || '').split('\n')[0] ?? '').replace(/"/g, '\\"');
 
     return `
   server.tool(
