@@ -83,7 +83,11 @@ jobs:
 
       - name: 🧩 Unit Tests (Backend)
         working-directory: ./backend
-        run: npm test
+        run: npm run test:unit
+
+      - name: 🧪 Integration Tests (Backend)
+        working-directory: ./backend
+        run: npm run test:integration
 
   build-validation:
     name: 🏗️ Build Verification

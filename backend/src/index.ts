@@ -11,7 +11,7 @@ import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 3001;
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 
@@ -79,12 +79,18 @@ if (enableMcpSse) {
     });
 }
 
-app.listen(PORT, () => {
-    logger.info({ port: PORT }, 'Server is running');
-});
+export function startServer() {
+    return app.listen(PORT, () => {
+        logger.info({ port: PORT }, 'Server is running');
+    });
+}
 
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.error({ err, requestId: (req as any).requestId }, 'Unhandled error');
     const status = err.statusCode || err.status || 500;
     res.status(status).json({ error: err.message || 'Internal server error' });
 });
+
+if (process.env.NODE_ENV !== 'test') {
+    startServer();
+}
