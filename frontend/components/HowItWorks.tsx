@@ -17,7 +17,7 @@ const steps = [
   },
   {
     title: "Deploy with confidence",
-    description: "Download the server and run locally or via tunnel.",
+    description: "Choose Local for Claude Desktop or Cloud for tunnels and dashboards.",
     icon: CheckCircle2
   }
 ];

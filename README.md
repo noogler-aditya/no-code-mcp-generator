@@ -105,13 +105,15 @@ graph TD
 Once you download your project, here is how to use it:
 
 ### 1. Local Mode (Claude Desktop)
-Run directly on your machine.
+Run directly on your machine using stdio.
 ```bash
 cd my-generated-server
-npm install
-npm start
+npm run setup:claude
 ```
-*Then add to your Claude Desktop config.*
+This installs dependencies, builds, and configures Claude Desktop with **absolute paths**.  
+Restart Claude Desktop after running.
+
+> ⚠️ Tunnel URLs do **not** work with Claude Desktop. Use Local Mode (stdio).
 
 ### 2. Hybrid Tunnel Mode (Enterprise)
 Expose your local server securely to a managed cloud dashboard.

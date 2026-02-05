@@ -17,7 +17,7 @@ export const FEATURES = [
   {
     title: "Hybrid deployment",
     description:
-      "Run locally or bridge to the cloud with secure tunneling built in."
+      "Local-first for Claude Desktop, with optional tunnels for cloud dashboards."
   }
 ];
 
