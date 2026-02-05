@@ -5,7 +5,6 @@ import FeatureGrid from "@/components/FeatureGrid";
 import SecuritySuite from "@/components/SecuritySuite";
 import HowItWorks from "@/components/HowItWorks";
 import UploadPanel from "@/components/UploadPanel";
-import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -43,7 +42,6 @@ export default function Page() {
         <SecuritySuite />
         <HowItWorks />
         <UploadPanel />
-        <Testimonials />
         <FAQ />
         <CTA />
         <Footer />
