@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   quality-gate:
-    name: 🛡️ Quality & Security
+    name: Quality & Security
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -31,38 +31,38 @@ jobs:
             backend/package-lock.json
 
       # Frontend Checks
-      - name: 📦 Install Frontend Dependencies
+      - name:  Install Frontend Dependencies
         working-directory: ./frontend
         run: npm ci
 
-      - name: 🎨 Frontend Lint (ESLint)
+      - name:  Frontend Lint (ESLint)
         working-directory: ./frontend
         run: npm run lint
 
-      - name: 📐 Frontend Type Check
+      - name:  Frontend Type Check
         working-directory: ./frontend
         run: npx tsc --noEmit
 
       # Backend Checks
-      - name: 📦 Install Backend Dependencies
+      - name:  Install Backend Dependencies
         working-directory: ./backend
         run: npm ci
 
-      - name: 📐 Backend Type Check
+      - name:  Backend Type Check
         working-directory: ./backend
         run: npx tsc --noEmit
 
       # Security Scan
-      - name: 🔒 Security Audit (Frontend)
+      - name:  Security Audit (Frontend)
         working-directory: ./frontend
         run: npm audit --audit-level=high
 
-      - name: 🔒 Security Audit (Backend)
+      - name:  Security Audit (Backend)
         working-directory: ./backend
         run: npm audit --audit-level=high
 
-  tests:
-    name: 🧪 Automated Testing
+  test:
+    name: Automated Testing
     needs: quality-gate
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -81,17 +81,17 @@ jobs:
           cd frontend && npm ci
           cd ../backend && npm ci
 
-      - name: 🧩 Unit Tests (Backend)
+      - name:  Unit Tests (Backend)
         working-directory: ./backend
         run: npm run test:unit
 
-      - name: 🧪 Integration Tests (Backend)
+      - name:  Integration Tests (Backend)
         working-directory: ./backend
         run: npm run test:integration
 
   build-validation:
-    name: 🏗️ Build Verification
-    needs: tests
+    name:  Build Verification
+    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
