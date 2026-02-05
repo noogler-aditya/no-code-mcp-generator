@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: "3001"
+      FRONTEND_URLS: "http://localhost:3000"
+      PUBLIC_DOWNLOADS: "true"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_BACKEND_URL: "http://localhost:3001"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

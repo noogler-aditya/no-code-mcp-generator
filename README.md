@@ -134,6 +134,45 @@ This project uses **GitHub Actions** for continuous integration:
 
 ---
 
+## 🐳 Docker / Containers
+
+### Local (Docker Compose)
+```bash
+docker compose up --build
+```
+Frontend: `http://localhost:3000`  
+Backend health: `http://localhost:3001/health`
+
+### Pull prebuilt images (GHCR)
+```bash
+docker pull ghcr.io/<owner>/mcp-generator-frontend:latest
+docker pull ghcr.io/<owner>/mcp-generator-backend:latest
+```
+
+### Run with `docker run`
+```bash
+docker run -p 3001:3001 \
+  -e PORT=3001 \
+  -e FRONTEND_URLS=http://localhost:3000 \
+  -e PUBLIC_DOWNLOADS=true \
+  ghcr.io/<owner>/mcp-generator-backend:latest
+```
+
+```bash
+docker run -p 3000:3000 \
+  ghcr.io/<owner>/mcp-generator-frontend:latest
+```
+
+### Config notes
+- `NEXT_PUBLIC_BACKEND_URL` is injected at **build time** for the frontend image.
+  Rebuild the image if you deploy the backend at a different URL.
+- Backend envs:
+  - `PUBLIC_DOWNLOADS=true` enables zip downloads without an API key.
+  - `PUBLIC_DOWNLOADS=false` requires `GENERATOR_API_KEY` and Authorization headers.
+  - `FRONTEND_URLS` controls allowed CORS origins.
+
+---
+
 ## 🔮 Roadmap
 
 -   [x] **MVP**: Basic Tool Generation from OpenAPI specs
