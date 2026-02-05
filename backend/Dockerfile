@@ -16,7 +16,6 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/templates ./templates
-COPY --from=builder /app/public ./public
 RUN mkdir -p /app/public/generated && chown -R node:node /app
 USER node
 EXPOSE 3001
