@@ -17,8 +17,7 @@ Examples of unacceptable behavior:
 - Trolling, insults, or personal attacks
 - Publishing others’ private information
 
-## Enforcement
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the maintainer at: **security@yourdomain.com**.
+
 
 ## Scope
 This code of conduct applies within all project spaces and also applies when representing the project in public spaces.

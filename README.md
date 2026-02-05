@@ -134,11 +134,12 @@ This project uses **GitHub Actions** for continuous integration:
 
 ## 🔮 Roadmap
 
--   [x] **MVP**: Basic Tool Generation
+-   [x] **MVP**: Basic Tool Generation from OpenAPI specs
 -   [x] **Security**: Rate Limiting & Auth Injection
--   [x] **Hybrid**: Tunneling Script
--   [ ] **Cloud Dashboard**: Hosted manager for tunneled agents
--   [ ] **Multi-Agent**: Orchestration between multiple MCP servers
+-   [x] **Hybrid**: Tunneling Script for local-to-cloud bridge
+-   [ ] **LLM-Powered Generation**: Generate MCP servers using natural language prompts powered by LLM models — describe your API in plain English and get a fully functional MCP server
+-   [ ] **One-Click Self-Hosted Deployment**: Deploy your generated MCP server directly from the website with a single click — no zip downloads, no manual setup, instant cloud hosting with auto-provisioned infrastructure
+-   [ ] **Multi-Agent Orchestration**: Connect and orchestrate multiple MCP servers to work together as a unified agent ecosystem
 
 ---
 
