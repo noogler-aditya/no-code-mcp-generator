@@ -145,8 +145,8 @@ Backend health: `http://localhost:3001/health`
 
 ### Pull prebuilt images (GHCR)
 ```bash
-docker pull ghcr.io/<owner>/mcp-generator-frontend:latest
-docker pull ghcr.io/<owner>/mcp-generator-backend:latest
+docker pull ghcr.io/<noogler-aditya>/mcp-generator-frontend:latest
+docker pull ghcr.io/<noogler-aditya>/mcp-generator-backend:latest
 ```
 
 ### Run with `docker run`
@@ -155,12 +155,12 @@ docker run -p 3001:3001 \
   -e PORT=3001 \
   -e FRONTEND_URLS=http://localhost:3000 \
   -e PUBLIC_DOWNLOADS=true \
-  ghcr.io/<owner>/mcp-generator-backend:latest
+  ghcr.io/<noogler-aditya>/mcp-generator-backend:latest
 ```
 
 ```bash
 docker run -p 3000:3000 \
-  ghcr.io/<owner>/mcp-generator-frontend:latest
+  ghcr.io/<noogler-aditya>/mcp-generator-frontend:latest
 ```
 
 ### Config notes
