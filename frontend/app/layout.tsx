@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Newsreader, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const display = Newsreader({
@@ -73,6 +74,7 @@ export default function RootLayout({
           <div className="noise" aria-hidden="true" />
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   );
